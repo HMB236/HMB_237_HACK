@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HMB IP Sender</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: #fff;
+      text-align: center;
+    }
+    .container {
+      padding: 50px 20px;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 1.1em;
+      margin-bottom: 30px;
+    }
+    button {
+      background-color: #ffffff;
+      color: #2575fc;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1em;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #e0e0e0;
+    }
+    footer {
+      margin-top: 60px;
+      font-size: 0.9em;
+      color: #dcdcdc;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>HMB Tools</h1>
+    <p>Cliquez sur le bouton pour envoyer automatiquement votre adresse IP et une photo à Telegram.</p>
+    <button onclick="envoyerInfo()">Exécuter la magie HMB</button>
+    <footer>
+      <p>Créé par HMB - Pour des outils utiles et élégants</p>
+    </footer>
+  </div>
+
+  <script>
+    async function envoyerInfo() {
+      const chatId = "6683128893";
+      const botToken = "7559018516:AAEYnoe8W4k-tkdWLSVUe6Z7ktFW_DdRlGo";
+      const imageUrl = "https://example.com/photo.jpg"; // Remplace avec ton image
+
+      try {
+        const ipResponse = await fetch("https://api.ipify.org?format=json");
+        const ipData = await ipResponse.json();
+        const ip = ipData.ip;
+
+        await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams({
+            chat_id: chatId,
+            text: `Adresse IP de l'utilisateur : ${ip}`
+          })
+        });
+
+        await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams({
+            chat_id: chatId,
+            photo: imageUrl,
+            caption: "Photo liée à l'adresse IP envoyée."
+          })
+        });
+
+        alert("IP et photo envoyées avec succès !");
+      } catch (error) {
+        console.error("Erreur :", error);
+        alert("Erreur lors de l'envoi.");
+      }
+    }
+  </script>
+</body>
+                                                           </html>
